@@ -40,18 +40,19 @@ pipeline {
         }
 
         stage('Upload Artifact to Nexus') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'nexuslogin',
-                    usernameVariable: 'NEXUS_USER',
-                    passwordVariable: 'NEXUS_PASS'
-                )]) {
-                    sh """
-                    mvn deploy -DskipTests
-                    """
-                }
-            }
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'nexuslogin',
+            usernameVariable: 'NEXUS_USER',
+            passwordVariable: 'NEXUS_PASS'
+        )]) {
+            sh """
+            mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml
+            """
         }
+    }
+}
+
     }
 
     post {
