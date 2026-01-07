@@ -32,8 +32,22 @@ pipeline {
                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                     sh """
                     mvn sonar:sonar \
-                      -Dsonar.host.url=http://172.31.18.31:9000 \
+                      -Dsonar.host.url=http://<SONAR_IP>:9000 \
                       -Dsonar.login=$SONAR_TOKEN
+                    """
+                }
+            }
+        }
+
+        stage('Upload Artifact to Nexus') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexuslogin',
+                    usernameVariable: 'NEXUS_USER',
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+                    sh """
+                    mvn deploy -DskipTests
                     """
                 }
             }
@@ -42,7 +56,7 @@ pipeline {
 
     post {
         success {
-            echo 'Build, Test & SonarQube analysis successful!'
+            echo 'Build, Test, SonarQube & Nexus upload successful!'
         }
         failure {
             echo 'Pipeline failed!'
