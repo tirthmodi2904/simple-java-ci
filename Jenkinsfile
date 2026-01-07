@@ -32,7 +32,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                     sh """
                     mvn sonar:sonar \
-                      -Dsonar.host.url=http://<SONAR_IP>:9000 \
+                      -Dsonar.host.url=http://172.31.18.31:9000 \
                       -Dsonar.login=$SONAR_TOKEN
                     """
                 }
@@ -56,7 +56,7 @@ pipeline {
 
     post {
         success {
-            echo 'Build, Test, SonarQube & Nexus upload successful!'
+            echo 'Build, Test, SonarQube & Nexus upload SUCCESS!'
         }
         failure {
             echo 'Pipeline failed!'
