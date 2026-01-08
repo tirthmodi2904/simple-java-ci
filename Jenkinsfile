@@ -28,42 +28,39 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-             steps {
-              withSonarQubeEnv('sonarserver') {
-                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                sh """
-                mvn sonar:sonar \
-                  -Dsonar.login=$SONAR_TOKEN
-                """
+            steps {
+                withSonarQubeEnv('sonarserver') {
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                        sh """
+                        mvn sonar:sonar \
+                          -Dsonar.login=$SONAR_TOKEN
+                        """
+                    }
                 }
             }
         }
-    }
 
-         stage('SonarQube Quality Gate') {
+        stage('SonarQube Quality Gate') {
             steps {
-            timeout(time: 2, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
         }
-    }
-}
-
-
 
         stage('Upload Artifact to Nexus') {
-    steps {
-        withCredentials([usernamePassword(
-            credentialsId: 'nexuslogin',
-            usernameVariable: 'NEXUS_USER',
-            passwordVariable: 'NEXUS_PASS'
-        )]) {
-            sh """
-            mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml
-            """
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexuslogin',
+                    usernameVariable: 'NEXUS_USER',
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+                    sh """
+                    mvn deploy -DskipTests -s /var/lib/jenkins/.m2/settings.xml
+                    """
+                }
+            }
         }
-    }
-}
-
     }
 
     post {
