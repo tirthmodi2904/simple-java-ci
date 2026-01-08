@@ -28,24 +28,26 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
+             steps {
+              withSonarQubeEnv('sonarserver') {
                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                    sh """
-                    mvn sonar:sonar \
-                      -Dsonar.host.url=http://172.31.18.31:9000 \
-                      -Dsonar.login=$SONAR_TOKEN
-                    """
+                sh """
+                mvn sonar:sonar \
+                  -Dsonar.login=$SONAR_TOKEN
+                """
                 }
             }
         }
+    }
 
-        stage('SonarQube Quality Gate') {
+         stage('SonarQube Quality Gate') {
             steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                 waitForQualityGate abortPipeline: true
-            }
+            timeout(time: 2, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
         }
     }
+}
+
 
 
         stage('Upload Artifact to Nexus') {
