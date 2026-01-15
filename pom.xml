@@ -7,7 +7,7 @@
 
     <groupId>com.devops</groupId>
     <artifactId>simple-java-ci</artifactId>
-    <version>1.0.0</version> <!-- MUST NOT be SNAPSHOT for releases -->
+    <version>1.0.1</version> <!-- MUST NOT be SNAPSHOT for releases -->
 
     <!-- Java version -->
     <properties>
