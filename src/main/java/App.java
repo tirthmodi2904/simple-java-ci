@@ -3,7 +3,7 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Hello DevOps Internship");
 
-      /*  int x1 = 10 / 0;
+        int x1 = 10 / 0;
         int x2 = 20 / 0;
         int x3 = 30 / 0;
         int x4 = 40 / 0;
@@ -14,7 +14,7 @@ public class App {
         int x9 = 90 / 0;
         int x10 = 100 / 0;
         int x11 = 110 / 0;
-        */
+        
 
     }
 
